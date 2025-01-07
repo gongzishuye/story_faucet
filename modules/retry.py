@@ -14,7 +14,7 @@ def retry(module_str: str, retries=RETRY):
 
                 except Exception as e:
                     error_string = f'[-][{attempt+1}/{retries}] {module_str} | {e}'
-                    logger.error(error_string)
+                    logger.warning(error_string)
                     attempt += 1
                     if attempt == retries:
                         raise ValueError(f'{module_str}: {e}')

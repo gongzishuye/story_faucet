@@ -50,14 +50,20 @@ def load_proxies(file_path, accounts):
                     proxies.append(proxy.strip())
                 else:
                     exit('Incorrect format of proxies! The correct one is: ip:port:login:pass')
-        accounts_proxy = {}
-        if len(proxies) != len(accounts):
-            exit('Proxies and privates numbers are different, I am ending! Set USE_PROXY = False or add additional proxies')
-        else:
-            wal_data = list(zip(proxies, accounts))
-            for proxy, account in wal_data:
-                accounts_proxy[account] = proxy
-        return accounts_proxy
+        # accounts_proxy = {}
+        # if len(proxies) != len(accounts):
+        #     exit('Proxies and privates numbers are different, I am ending! Set USE_PROXY = False or add additional proxies')
+        # else:
+        #     wal_data = list(zip(proxies, accounts))
+        #     for proxy, account in wal_data:
+        #         accounts_proxy[account] = proxy
+        # return accounts_proxy
+        if not proxies: return None
+        proxy_list = proxies[0].split(':')
+        return {
+            'http': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}',
+            'https': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}'
+        }
     else:
         return None
 
