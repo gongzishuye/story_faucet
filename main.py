@@ -9,7 +9,7 @@ from settings import SHUFFLE_WALLETS, INFINITY_MODE
 
 def process_address(address: str, proxy: dict):
     try:
-        logger.info(f'Account {address} started!')
+        logger.info(f'Account {address} started! {proxy["http"]}')
         faucet = Faucet(address, proxy)
         faucet.claim_tokens()  # 保存返回值
     except AttributeError as e:
@@ -17,9 +17,13 @@ def process_address(address: str, proxy: dict):
     except Exception as e:
         logger.error(f'Account {address} error!\n{str(e)}')
 
-async def process_address_group(addresses: List[str], proxy: dict):
+async def process_address_group(addresses: List[str], accounts_proxy: List[dict]):
     tasks = [
-        asyncio.to_thread(process_address, address, proxy)
+        asyncio.to_thread(
+            process_address, 
+            address, 
+            random.choice(accounts_proxy) if accounts_proxy else None
+        )
         for address in addresses
     ]
     await asyncio.gather(*tasks)
@@ -34,7 +38,7 @@ async def main():
         pass
 
     # 将地址列表分组，每组5个
-    batch_size = 5
+    batch_size = 3
     address_groups = [addresses[i:i + batch_size] for i in range(0, len(addresses), batch_size)]
 
     for group in address_groups:

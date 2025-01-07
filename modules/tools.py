@@ -59,11 +59,15 @@ def load_proxies(file_path, accounts):
         #         accounts_proxy[account] = proxy
         # return accounts_proxy
         if not proxies: return None
-        proxy_list = proxies[0].split(':')
-        return {
-            'http': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}',
-            'https': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}'
-        }
+
+        proxy_list_format = []
+        for proxy in proxies:
+            proxy_list = proxy.split(':')
+            proxy_list_format.append({
+                'http': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}',
+                'https': f'http://{proxy_list[2]}:{proxy_list[3]}@{proxy_list[0]}:{proxy_list[1]}'
+            })
+        return proxy_list_format
     else:
         return None
 
